@@ -16,9 +16,9 @@ class db_conn
     }
   }
 
-  public function insert($title, $description, $author)
+  public function insert($title, $description, $author,$img)
   {
-    $sql = "INSERT INTO `blog_list` (`title`, `description`, `author`, `date`) VALUES ('$title', '$description','$author', current_timestamp())";
+    $sql = "INSERT INTO `blog_list` (`title`, `description`, `author`, `date`, `img`) VALUES ('$title', '$description','$author', current_timestamp(), '$img')";
     $result = mysqli_query($this->conn, $sql);
     if ($result) {
       echo "Your data is inserted successfully.";
@@ -36,10 +36,21 @@ class db_conn
       echo "An error occurred - data is not read.";
     }
   }
-  public function update($id, $title, $description, $author)
+  public function fetchOneData($id)
+  {
+    $sql = "SELECT * FROM `blog_list` WHERE `blog_list`.`id` = '$id'";
+    $result = mysqli_query($this->conn, $sql);
+    if ($result->num_rows==1) {
+      $row = $result->fetch_assoc();
+      return $row;
+    } else {
+      echo "An error occurred - data is not read.";
+    }
+  }
+  public function update($id, $title, $description, $author, $img)
   {
 
-    $sql = "UPDATE `blog_list` SET `title` = '$title', `description` = '$description' , `author` = '$author' WHERE `blog_list`.`id` = '$id'";
+    $sql = "UPDATE `blog_list` SET `title` = '$title', `description` = '$description' , `author` = '$author', `img` = '$img' WHERE `blog_list`.`id` = '$id'";
     $result = mysqli_query($this->conn, $sql);
     if ($result) {
       echo "data is  updated successfully";
