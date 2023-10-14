@@ -2,11 +2,17 @@
 include "components/db.php";
 
 $db = new db_conn();
-
-if (isset($_GET['delete'])) {
+if (isset($_GET['delete']) && $_GET['img']) {
+    $img = $_GET['img'];
     $id = $_GET['delete'];
     $delete = $db->delete($id);
-    header("Location: index.php ");
+    $target_dir = "images/";
+    $target_file = $target_dir . $img;
+    if (file_exists($target_file)) {
+        unlink($target_file);
+    }
+    header("location: index.php");
+    exit();
 }
 
 ?>
@@ -27,6 +33,7 @@ if (isset($_GET['delete'])) {
 
 <?php
     require "components/navbar.php";
+    
 ?>
     
 
@@ -65,9 +72,9 @@ if (isset($_GET['delete'])) {
                         <p class="card-text text-strong fw-bold"> By - ' . $blog['author'] . '</p>
                         <p class="card-text"><small class="text-body-secondary fw-bold">' . date('d-M-Y',strtotime($blog['date'])) . '</small></p>
                         <div class="d-flex">
-                        <button type="button" id=' . $blog['id'] . ' class="edit btn btn-warning mx-2">Edit</button>
-                        <button type="button" id=d' . $blog['id'] . ' class="delete btn btn-danger">Delete</button>
-                        <button type="button" id=v' . $blog['id'] . ' class="view btn btn-info mx-2">View</button>
+                        <a href="edit.php?update='.$blog['id'].'" class="edit btn btn-warning mx-2">Edit</a>
+                        <button type="button" id=d' . $blog['id'] . ' class="delete '.$blog['img'].' btn btn-danger">Delete</button>
+                        <a href="view.php?view='.$blog['id'].'" class="btn btn-info mx-2">View</a>
                     </div>
                     </div>
                 </div>
@@ -82,32 +89,21 @@ if (isset($_GET['delete'])) {
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
     <script>
-        edits = document.getElementsByClassName('edit');
-Array.from(edits).forEach((element) => {
-    element.addEventListener('click', (e) => {
-        id = e.target.id;
-        console.log(id);
-        window.location = `edit.php?update=${id}`;
-    })
-})
+  
 
 deletes = document.getElementsByClassName('delete');
 Array.from(deletes).forEach((element) => {
     element.addEventListener('click', (e) => {
-        id = e.target.id.substring(1);
-        console.log(id);
-        window.location = `index.php?delete=${id}`;
+        
+        if(confirm("Are you sure you want to delete?")){
+            list = e.target.classList[1];
+            id = e.target.id.substring(1);
+            console.log(list);
+            window.location = `index.php?delete=${id}&img=${list}`;
+        }
     })
 })
 
-views = document.getElementsByClassName('view');
-Array.from(views).forEach((element) => {
-    element.addEventListener('click', (e) => {
-        id = e.target.id.substring(1);
-        console.log(id);
-        window.location = `view.php?view=${id}`;
-    })
-})
     </script>
 </body>
 

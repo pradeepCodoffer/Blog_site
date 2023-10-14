@@ -1,29 +1,15 @@
 <?php
-
-class db_conn
+include 'db_connetion.php';
+class db_conn extends connection
 {
-  public $serverName = "localhost";
-  public $user = "root";
-  public $pass = "";
-  public $database = "blog";
-  public $conn;
-
-  function __construct()
-  {
-    $this->conn = mysqli_connect($this->serverName, $this->user, $this->pass, $this->database);
-    if (mysqli_connect_errno()) {
-      echo 'Error connecting to' . mysqli_connect_error();
-    }
-  }
-
-  public function insert($title, $description, $author,$img)
+  public function insert($title, $description, $author, $img)
   {
     $sql = "INSERT INTO `blog_list` (`title`, `description`, `author`, `date`, `img`) VALUES ('$title', '$description','$author', current_timestamp(), '$img')";
     $result = mysqli_query($this->conn, $sql);
     if ($result) {
       echo "Your data is inserted successfully.";
     } else {
-      echo 'An error occurred - data is not inserted' .  mysqli_error($this->conn);
+      echo '<script>alert("Data is not inserted due to some technical error.")</script>';
     }
   }
   public function fetchData()
@@ -33,7 +19,7 @@ class db_conn
     if ($result) {
       return $result;
     } else {
-      echo "An error occurred - data is not read.";
+      echo '<script>alert("Data is not fetched due to some technical error.")</script>'; 
     }
   }
   public function fetchOneData($id)
@@ -44,7 +30,7 @@ class db_conn
       $row = $result->fetch_assoc();
       return $row;
     } else {
-      echo "An error occurred - data is not read.";
+      echo '<script>alert("Data is not fetched due to some technical error.")</script>';
     }
   }
   public function update($id, $title, $description, $author, $img)
@@ -55,7 +41,7 @@ class db_conn
     if ($result) {
       echo "data is  updated successfully";
     } else {
-      echo "data is not updated successfully";
+      echo '<script>alert("Data is not updated due to some technical error.")</script>';
     }
   }
   public function delete($id)
@@ -65,7 +51,7 @@ class db_conn
     if ($result) {
       echo "deleted successfully";
     } else {
-      echo "data is not deleted successfully";
+      echo '<script>alert("Data is not deleted due to some technical error.")</script>';
     }
   }
 }
