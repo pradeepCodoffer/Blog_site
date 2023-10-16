@@ -15,12 +15,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
    
 if($_FILES['image']['name'] != ""){
     $target_dir = "images/";
-    $target_file = $target_dir . basename($img);
-    $target_new_file = $target_dir . basename($_POST['img']);
+    $target_file = $target_dir . basename($_FILES['image']['name']);
+    $target_old_file = $target_dir . basename($_POST['img']);
     $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 
-    if (file_exists($target_file)) {
-        unlink($target_file);
+    if (file_exists($target_old_file)) {
+        unlink($target_old_file);
     }
     if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
     && $imageFileType != "gif" ) {
