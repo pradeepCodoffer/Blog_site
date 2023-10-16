@@ -9,10 +9,10 @@ class connection
 
   function __construct()
   {
-    $this->conn = mysqli_connect($this->serverName, $this->user, $this->pass, $this->database);
+    $this->conn = @new mysqli($this->serverName, $this->user, $this->pass, $this->database);
     if (mysqli_connect_errno()) {
       echo '<script>alert("Database is not connected due to some technical error.")</script>'; 
-      exit();
+      exit("Connection failed");
     }
   }
 }

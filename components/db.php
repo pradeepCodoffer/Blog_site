@@ -22,6 +22,7 @@ class db_conn extends connection
       return $result;
     } else {
       echo '<script>alert("Data is not fetched due to some technical error.")</script>'; 
+      // header("location:index.php");
       exit();
     }
   }
@@ -56,7 +57,7 @@ class db_conn extends connection
     if ($result) {
       echo "deleted successfully";
     } else {
-      echo '<script>alert("Data is not deleted due to some technical error.")</script>';
+      echo '<script>await alert("Data is not deleted due to some technical error.")</script>';
       exit();
     }
   }
