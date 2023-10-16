@@ -11,7 +11,8 @@ class connection
   {
     $this->conn = mysqli_connect($this->serverName, $this->user, $this->pass, $this->database);
     if (mysqli_connect_errno()) {
-      echo 'Error connecting to' . mysqli_connect_error();
+      echo '<script>alert("Database is not connected due to some technical error.")</script>'; 
+      exit();
     }
   }
 }

@@ -10,6 +10,8 @@ class db_conn extends connection
       echo "Your data is inserted successfully.";
     } else {
       echo '<script>alert("Data is not inserted due to some technical error.")</script>';
+      header("location:index.php");
+      exit();
     }
   }
   public function fetchData()
@@ -20,6 +22,7 @@ class db_conn extends connection
       return $result;
     } else {
       echo '<script>alert("Data is not fetched due to some technical error.")</script>'; 
+      exit();
     }
   }
   public function fetchOneData($id)
@@ -30,7 +33,8 @@ class db_conn extends connection
       $row = $result->fetch_assoc();
       return $row;
     } else {
-      echo '<script>alert("Data is not fetched due to some technical error.")</script>';
+      echo '<script>alert("Data is not updated due to some technical error.")</script>';
+      header("location:index.php");
     }
   }
   public function update($id, $title, $description, $author, $img)
@@ -42,6 +46,7 @@ class db_conn extends connection
       echo "data is  updated successfully";
     } else {
       echo '<script>alert("Data is not updated due to some technical error.")</script>';
+      exit();
     }
   }
   public function delete($id)
@@ -52,6 +57,7 @@ class db_conn extends connection
       echo "deleted successfully";
     } else {
       echo '<script>alert("Data is not deleted due to some technical error.")</script>';
+      exit();
     }
   }
 }

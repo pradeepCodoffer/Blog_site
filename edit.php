@@ -57,6 +57,7 @@ if($_FILES['image']['name'] != ""){
         <style>
             .outline{
                 outline: 4px solid red;
+                
             }
         </style>
 </head>
