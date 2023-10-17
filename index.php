@@ -1,4 +1,8 @@
 <?php
+session_start();
+if(!isset($_SESSION['login']) || $_SESSION['login']!=true){
+    header('location: login.php');
+}
 include "components/db.php";
 
 $db = new db_conn();
@@ -13,6 +17,12 @@ if (isset($_GET['delete']) && $_GET['img']) {
     }
     header("location: index.php");
     exit();
+}
+
+if(isset($_GET['logout'])){
+    session_unset();
+    session_destroy();
+    header('location:login.php');
 }
 
 ?>
@@ -71,10 +81,16 @@ if (isset($_GET['delete']) && $_GET['img']) {
                         <p class="card-text d-none">' . $blog['description'] . '</p>
                         <p class="card-text text-strong fw-bold"> By - ' . $blog['author'] . '</p>
                         <p class="card-text"><small class="text-body-secondary fw-bold">' . date('d-M-Y',strtotime($blog['date'])) . '</small></p>
-                        <div class="d-flex">
-                        <a href="edit.php?update='.$blog['id'].'" class="edit btn btn-warning mx-2">Edit</a>
-                        <button type="button" id=d' . $blog['id'] . ' class="delete '.$blog['img'].' btn btn-danger">Delete</button>
-                        <a href="view.php?view='.$blog['id'].'" class="btn btn-info mx-2">View</a>
+                        <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <a href="edit.php?update='.$blog['id'].'" class="edit btn btn-warning mx-2">Edit</a>
+                            <button type="button" id=d' . $blog['id'] . ' class="delete '.$blog['img'].' btn btn-danger">Delete</button>
+                            <a href="view.php?view='.$blog['id'].'" class="btn btn-info mx-2">View</a>
+                        </div>
+                        <div>
+                            <img style=" width:35px; " src="./assests/like.png" alt="likes" />
+                            <span class="card-text"><small class="text-body-secondary fw-bold">'.$blog['likes'].'</small></span>
+                        </div>
                     </div>
                     </div>
                 </div>

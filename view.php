@@ -1,10 +1,39 @@
 <?php
+session_start();
+if(!isset($_SESSION['login']) || $_SESSION['login']!=true){
+    header('location: login.php');
+}
+
+
+?>
+
+
+<?php
   include 'components/db.php';
   $db = new db_conn();
   $data;
-  if($_GET['view']){
+  if(isset($_GET['view'])){
     $id = $_GET['view'];
     $data = $db->fetchOneData($id);
+  }
+
+  if(isset($_GET['id'])){
+    $id = $_GET['id'];
+    $email = $_SESSION['email'];
+    echo $id;
+    $updateLike = $db->updateLikes($id);
+    $liked = $db->insertLike($email,$id);
+    header('location: view.php?view='.$id.'');
+  }
+
+  $liked = false;
+  if(isset($_SESSION['email'])){
+    $email = $_SESSION['email'];
+    $id = $_GET['view'];
+    $isLiked = $db->fetchLikedInfo($id,$email);
+    if($isLiked!=null){
+      $liked = true;
+    }
   }
 
 ?>
@@ -31,10 +60,33 @@
           <p class="text-justify" style="text-align: justify;"><?php echo $data['description'];?></p>
           <div class="d-flex justify-content-between py-3">
             <p class="fw-bold fs-4">Date:-<?php echo date('d-M-Y',strtotime($data['date'])); ?></p>
+            <?php
+            if(!$liked){
+              echo '<div id = "like">
+            <img style=" width:35px; " src="./assests/unlike.png" alt="likes" />
+              <span class="card-text"><small class="text-body-secondary fw-bold">Like</small></span>
+            </div>';
+            }
+            else{
+              echo '<div>
+            <img style=" width:35px; " src="./assests/like.png" alt="likes" />
+              <span class="card-text"><small class="text-body-secondary fw-bold">Liked</small></span>
+            </div>';
+            }
+            ?>
             <p class="fw-bold fs-4">By:-<?php echo $data['author']; ?></p>
           </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script>
+      const like = document.getElementById('like');
+      like.addEventListener('click', function(e){
+        const view = window.location.search;
+        const urlParams = new URLSearchParams(view);
+        const id = urlParams.get('view');
+        window.location= `view.php?id=${id}`;
+      })
+    </script>
   </body>
 </html>
