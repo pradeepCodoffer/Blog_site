@@ -20,8 +20,6 @@ if(!isset($_SESSION['login']) || $_SESSION['login']!=true){
   if(isset($_GET['like'])){
     $id = $_GET['like'];
     $email = $_SESSION['email'];
-    echo $id;
-    $updateLike = $db->increaseLike($id);
     $liked = $db->insertLike($email,$id);
     header('location: view.php?view='.$id.'');
   }
@@ -29,8 +27,6 @@ if(!isset($_SESSION['login']) || $_SESSION['login']!=true){
   if(isset($_GET['dislike'])){
     $id = $_GET['dislike'];
     $email = $_SESSION['email'];
-    echo $id;
-    $deleteLike = $db->decreaseLike($id);
     $liked = $db->deleteLike($email,$id);
     header('location: view.php?view='.$id.'');
   }

@@ -75,30 +75,7 @@ class db_conn extends connection
       exit();
     }
   }
-  public function increaseLike($id)
-  {
-
-    $sql = "UPDATE `blog_list` SET `likes` = `likes`+1 WHERE `blog_list`.`id` = '$id'";
-    $result = mysqli_query($this->conn, $sql);
-    if ($result) {
-      echo "Like increase by one successfully";
-    } else {
-      echo '<script>alert("Data is not updated due to some technical error.")</script>';
-      exit();
-    }
-  }
-  public function decreaseLike($id)
-  {
-
-    $sql = "UPDATE `blog_list` SET `likes` = `likes`-1 WHERE `blog_list`.`id` = '$id'";
-    $result = mysqli_query($this->conn, $sql);
-    if ($result) {
-      echo "Like decrease by one successfully";
-    } else {
-      echo '<script>alert("Data is not updated due to some technical error.")</script>';
-      exit();
-    }
-  }
+  
   public function delete($id)
   {
     $sql = "DELETE FROM blog_list WHERE `blog_list`.`id` = '$id'";
@@ -113,10 +90,10 @@ class db_conn extends connection
 
   public function register($email, $name, $password, $phoneNo)
   {
-    $sql = "INSERT INTO `blog`.`users` (`email`, `name`, `password`, `phone`, `date`) VALUES ('$email', '$name','$password','$phoneNo', current_timestamp())";
+    $sql = "INSERT INTO `users` (`email`, `name`, `password`, `phone`, `date`) VALUES ('$email', '$name','$password','$phoneNo', current_timestamp())";
     $result = mysqli_query($this->conn, $sql);
     if ($result) {
-      echo "Your data is inserted successfully.";
+      echo "User Registered successfully.";
       return true;
     } else {
       echo '<script>alert("User is already Exist.")</script>';
@@ -134,8 +111,9 @@ class db_conn extends connection
       return $row;
     } else {
       echo '<script>alert("Not able to login.")</script>';
+
+      header("location:login.php");
       exit();
-      // header("location:index.php");
     }
   }
   public function insertLike($email, $id)
@@ -172,6 +150,15 @@ class db_conn extends connection
       
       $row = $result->fetch_assoc();
       return $row;
+    }
+  } 
+  public function totalLikes($id)
+  {
+    $sql = "SELECT * FROM blog_list INNER JOIN liked ON blog_list.id=liked.blogId WHERE blogId='$id'";
+    $result = mysqli_query($this->conn, $sql);
+    if ($result) {
+      $total_data = mysqli_num_rows($result);  
+      return $total_data;
     }
   }
 }

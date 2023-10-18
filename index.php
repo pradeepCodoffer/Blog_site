@@ -25,6 +25,11 @@ if(isset($_GET['logout'])){
     header('location:login.php');
 }
 
+// if($_SERVER['REQUEST_METHOD'] == 'GET'){
+//     $page_to_display = $_GET['page'];
+//     header("location:index.php?page=".$page_to_display);
+// }
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -60,27 +65,44 @@ if(isset($_GET['logout'])){
     <!-- Blog Card starts -->
 
     <div class="container">
-
-        <h3 class="py-3">Our Blogs</h3>
+        
 
         <?php
         
         $total_blogs = mysqli_fetch_assoc($db->countBlogs());
         $total_blogs = $total_blogs['COUNT(id)'];
-        $set = 0;
-        if(isset($_GET['offset'])){
-            $set =(int)$_GET['offset'];
-            if($set<0 || $set>=$total_blogs){
+        $page = 1;
+        if(isset($_GET['page'])){
+            $page =(int)$_GET['page'];
+            if($page<=0 || $page>=($total_blogs/5)+1){
                 header('location:index.php');
             }
         }
-        $blogs = $db->fetchLimitData($set);
+        echo '<div class="d-flex justify-content-between align-items-center">
+
+                <h3 class="py-3">Our Blogs</h3>
+                <div class="d-flex align-items-center">
+                    <div class="d-flex align-items-center justify-content-center fw-bolder">
+                        Page: '.$page.' out of '.((int)($total_blogs/5)+1).'
+                    </div>
+                    <form method="get" action="" novalidate onsubmit="return validation()" class="d-flex align-items-center">
+                        <div class="mx-2" style="width:70px;">
+                            <input type="number" class="form-control" id="page" name="page" aria-describedby="emailHelp">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Go</button>
+                    </form>
+                </div>
+            </div>';
+        
+        $offset = ($page-1)*5;
+        $blogs = $db->fetchLimitData($offset);
         $total_blogs = mysqli_fetch_assoc($db->countBlogs());
         $total_blogs = $total_blogs['COUNT(id)'];
         // echo $total_blogs;
         // exit();
 
         while ($blog = mysqli_fetch_assoc($blogs)) {
+            $total_likes = $db->totalLikes($blog['id']);
             echo '<div class="card mb-3">
             <div class="row g-0">
                 <div class="col-md-4 d-flex justify-content-center">
@@ -89,7 +111,7 @@ if(isset($_GET['logout'])){
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
-                        <h5 class="card-title fw-bold">' . $blog["title"] . '</h5>
+                        <h5 class="card-page fw-bold">' . $blog["title"] . '</h5>
                         <p class="card-text">' . substr($blog['description'], 0, 180) . '...</p>
                         <p class="card-text d-none">' . $blog['description'] . '</p>
                         <p class="card-text text-strong fw-bold"> By - ' . $blog['author'] . '</p>
@@ -102,7 +124,7 @@ if(isset($_GET['logout'])){
                         </div>
                         <div>
                             <img style=" width:35px; " src="./assests/like.png" alt="likes" />
-                            <span class="card-text"><small class="text-body-secondary fw-bold">'.$blog['likes'].'</small></span>
+                            <span class="card-text"><small class="text-body-secondary fw-bold">'.$total_likes.'</small></span>
                         </div>
                     </div>
                     </div>
@@ -112,12 +134,12 @@ if(isset($_GET['logout'])){
         
         }
         echo '<div class="d-flex justify-content-center pb-5 pt-3">';
-        if($set>0){
-        echo '<a href="index.php?offset='.($set-5).'" class="btn btn-secondary mx-2">Prev</a>';
+        if($page>1){
+        echo '<a href="index.php?page='.($page-1).'" class="btn btn-secondary mx-2">Prev</a>';
         }
-        echo '<div class="border rounded px-3 d-flex align-items-center bg-secondary-subtle fw-bold" >'.(($set+5)/5).'</div>';
-        if($set+5<$total_blogs){
-        echo '<a href="index.php?offset='.($set+5).'" class="btn btn-secondary mx-2">Next</a>';
+        echo '<div class="border rounded px-3 d-flex align-items-center bg-secondary-subtle fw-bold" >'.($page).'</div>';
+        if($page<$total_blogs/5){
+        echo '<a href="index.php?page='.($page+1).'" class="btn btn-secondary mx-2">Next</a>';
         }
         echo '</div>';
         ?>
