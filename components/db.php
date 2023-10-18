@@ -26,6 +26,31 @@ class db_conn extends connection
       exit();
     }
   }
+  public function fetchLimitData($set)
+  {
+    $sql = "SELECT * FROM `blog_list` LIMIT 5 OFFSET $set";
+    $result = mysqli_query($this->conn, $sql);
+    if ($result) {
+      return $result;
+    } else {
+      echo '<script>alert("Data is not fetched due to some technical error.")</script>'; 
+      // header("location:index.php");
+      exit();
+    }
+  }
+  public function countBlogs()
+  {
+    $sql = "SELECT COUNT(id) FROM `blog_list`";
+    $result = mysqli_query($this->conn, $sql);
+    if ($result) {
+      return $result;
+    } else {
+      print_r($result);
+      echo '<script>alert("Data is not fetched due to some technical error.")</script>'; 
+      // header("location:index.php");
+      exit();
+    }
+  }
   public function fetchOneData($id)
   {
     $sql = "SELECT * FROM `blog_list` WHERE `blog_list`.`id` = '$id'";

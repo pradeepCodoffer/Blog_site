@@ -64,8 +64,21 @@ if(isset($_GET['logout'])){
         <h3 class="py-3">Our Blogs</h3>
 
         <?php
-
-        $blogs = $db->fetchData();
+        
+        $total_blogs = mysqli_fetch_assoc($db->countBlogs());
+        $total_blogs = $total_blogs['COUNT(id)'];
+        $set = 0;
+        if(isset($_GET['offset'])){
+            $set =(int)$_GET['offset'];
+            if($set<0 || $set>=$total_blogs){
+                header('location:index.php');
+            }
+        }
+        $blogs = $db->fetchLimitData($set);
+        $total_blogs = mysqli_fetch_assoc($db->countBlogs());
+        $total_blogs = $total_blogs['COUNT(id)'];
+        // echo $total_blogs;
+        // exit();
 
         while ($blog = mysqli_fetch_assoc($blogs)) {
             echo '<div class="card mb-3">
@@ -96,7 +109,17 @@ if(isset($_GET['logout'])){
                 </div>
             </div>
         </div>';
+        
         }
+        echo '<div class="d-flex justify-content-center pb-5 pt-3">';
+        if($set>0){
+        echo '<a href="index.php?offset='.($set-5).'" class="btn btn-secondary mx-2">Prev</a>';
+        }
+        echo '<div class="border rounded px-3 d-flex align-items-center bg-secondary-subtle fw-bold" >'.(($set+5)/5).'</div>';
+        if($set+5<$total_blogs){
+        echo '<a href="index.php?offset='.($set+5).'" class="btn btn-secondary mx-2">Next</a>';
+        }
+        echo '</div>';
         ?>
 
     </div>
