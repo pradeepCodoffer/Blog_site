@@ -68,9 +68,9 @@
             document.getElementById('email').classList.remove('outline');
             document.getElementById('password').classList.remove('outline');
             var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-            if(email.length>25 || email=="" || !email.match(validRegex)){
+            if(email=="" || !email.match(validRegex)){
                 document.getElementById('email').classList.add('outline');
-                document.getElementById('emailWarn').innerHTML = "Email must not greater than 25 characters and cannot blank and it should be valid email.";
+                document.getElementById('emailWarn').innerHTML = "Email cannot blank and it should be valid email.";
                 return false;
             }
             if(password=="") {

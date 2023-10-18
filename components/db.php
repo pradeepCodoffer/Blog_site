@@ -50,13 +50,25 @@ class db_conn extends connection
       exit();
     }
   }
-  public function updateLikes($id)
+  public function increaseLike($id)
   {
 
     $sql = "UPDATE `blog_list` SET `likes` = `likes`+1 WHERE `blog_list`.`id` = '$id'";
     $result = mysqli_query($this->conn, $sql);
     if ($result) {
-      echo "data is  updated successfully";
+      echo "Like increase by one successfully";
+    } else {
+      echo '<script>alert("Data is not updated due to some technical error.")</script>';
+      exit();
+    }
+  }
+  public function decreaseLike($id)
+  {
+
+    $sql = "UPDATE `blog_list` SET `likes` = `likes`-1 WHERE `blog_list`.`id` = '$id'";
+    $result = mysqli_query($this->conn, $sql);
+    if ($result) {
+      echo "Like decrease by one successfully";
     } else {
       echo '<script>alert("Data is not updated due to some technical error.")</script>';
       exit();
@@ -107,6 +119,19 @@ class db_conn extends connection
     $result = mysqli_query($this->conn, $sql);
     if ($result) {
       echo "Your data is inserted successfully.";
+    } else {
+      echo '<script>alert("Data is not inserted due to some technical error.")</script>';
+      header("location:index.php");
+      exit();
+    }
+  }
+  
+  public function deleteLike($email, $id)
+  {
+    $sql = $sql = "DELETE FROM liked WHERE `userEmail` = '$email' AND `blogId` = '$id'";
+    $result = mysqli_query($this->conn, $sql);
+    if ($result) {
+      echo "Your data is deleted successfully.";
     } else {
       echo '<script>alert("Data is not inserted due to some technical error.")</script>';
       header("location:index.php");

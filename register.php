@@ -4,7 +4,7 @@
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $email =  mysqli_real_escape_string($db->conn,$_POST['email']);
         $name=  mysqli_real_escape_string($db->conn,$_POST['name']);
-        $phone =  mysqli_real_escape_string($db->conn,$_POST['phone']);
+        $phone =  mysqli_real_escape_string($db->conn,$_POST['phoneNo']);
         $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
         $register = $db->register($email,$name,$password,$phone);
         if($register){
@@ -89,9 +89,9 @@
             document.getElementById('phoneNo').classList.remove('outline');
             document.getElementById('cPassword').classList.remove('outline');
             var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-            if(email.length>25 || email=="" || !email.match(validRegex)){
+            if( email=="" || !email.match(validRegex)){
                 document.getElementById('email').classList.add('outline');
-                document.getElementById('emailWarn').innerHTML = "Email must not greater than 25 characters and cannot blank and it should be valid email.";
+                document.getElementById('emailWarn').innerHTML = "Email cannot blank and it should be valid email.";
                 return false;
             }
             

@@ -17,12 +17,21 @@ if(!isset($_SESSION['login']) || $_SESSION['login']!=true){
     $data = $db->fetchOneData($id);
   }
 
-  if(isset($_GET['id'])){
-    $id = $_GET['id'];
+  if(isset($_GET['like'])){
+    $id = $_GET['like'];
     $email = $_SESSION['email'];
     echo $id;
-    $updateLike = $db->updateLikes($id);
+    $updateLike = $db->increaseLike($id);
     $liked = $db->insertLike($email,$id);
+    header('location: view.php?view='.$id.'');
+  }
+  
+  if(isset($_GET['dislike'])){
+    $id = $_GET['dislike'];
+    $email = $_SESSION['email'];
+    echo $id;
+    $deleteLike = $db->decreaseLike($id);
+    $liked = $db->deleteLike($email,$id);
     header('location: view.php?view='.$id.'');
   }
 
@@ -31,10 +40,13 @@ if(!isset($_SESSION['login']) || $_SESSION['login']!=true){
     $email = $_SESSION['email'];
     $id = $_GET['view'];
     $isLiked = $db->fetchLikedInfo($id,$email);
+    // var_dump( $isLiked);
+    // exit();
     if($isLiked!=null){
       $liked = true;
     }
   }
+  
 
 ?>
 <!doctype html>
@@ -68,7 +80,7 @@ if(!isset($_SESSION['login']) || $_SESSION['login']!=true){
             </div>';
             }
             else{
-              echo '<div>
+              echo '<div id ="dislike">
             <img style=" width:35px; " src="./assests/like.png" alt="likes" />
               <span class="card-text"><small class="text-body-secondary fw-bold">Liked</small></span>
             </div>';
@@ -85,8 +97,20 @@ if(!isset($_SESSION['login']) || $_SESSION['login']!=true){
         const view = window.location.search;
         const urlParams = new URLSearchParams(view);
         const id = urlParams.get('view');
-        window.location= `view.php?id=${id}`;
-      })
+        window.location= `view.php?like=${id}`;
+      });
+
+      
+    </script>
+    <script>
+      const disLike = document.getElementById('dislike');
+      disLike.addEventListener('click', function(e){
+        console.log("e");
+        const view = window.location.search;
+        const urlParams = new URLSearchParams(view);
+        const id = urlParams.get('view');
+        window.location= `view.php?dislike=${id}`;
+      });
     </script>
   </body>
 </html>
