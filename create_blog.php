@@ -60,7 +60,7 @@ if(isset($_FILES['image'])){
 ?>
     <div class=" bg-success-subtle">
         <div class="container py-5">
-            <form name="insertForm" method="post" action="" enctype="multipart/form-data" onsubmit="return validation()">
+            <form name="insertForm" method="post" action="" enctype="multipart/form-data" novalidate>
 
                 <input type="hidden" name="submit">
 
@@ -90,38 +90,72 @@ if(isset($_FILES['image'])){
 
         </div>
     </div>
+    <script src="js/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
     <script>
-        const validation = (e)=>{
-            const title = document.insertForm.title.value;
-            const desc = document.insertForm.desc.value;
-            const author = document.insertForm.author.value;
-            document.getElementById('titleWarn').innerHTML = "";
-            document.getElementById('descWarn').innerHTML = "";
-            document.getElementById('authorWarn').innerHTML ="";
-            document.getElementById('title').classList.remove('outline');
-            document.getElementById('desc').classList.remove('outline');
-            document.getElementById('author').classList.remove('outline');
+        $(document).ready(function(){
+            
+            $("form").submit(function(){
+                const title = $("#title").val();
+                const desc = $("#desc").val();
+                const author = $("#author").val();
+                $("#titleWarn").text("");
+                $("#descWarn").text("");
+                $("#authorWarn").text("");
+                $("#title").removeClass("outline");
+                $("#desc").removeClass("outline");
+                $("#author").removeClass("outline");
             if(title.length>50 || title==""){
-                document.getElementById('title').classList.add('outline');
-                document.getElementById('titleWarn').innerHTML = "Title must not greater than 50 characters and cannot blank.";
+                $('#title').addClass('outline');
+                $('#titleWarn').text("Title must not greater than 50 characters and cannot blank.");
                 return false;
             }
             
             if(desc.length<=150 || desc==null){
-                document.getElementById('desc').classList.add('outline');
-                document.getElementById('descWarn').innerHTML = "Description must be greater than 150 characters and cannot be blank.";
+                $('#desc').addClass('outline');
+                $('#descWarn').text("Description must be greater than 150 characters and cannot be blank.");
                 return false;
             }
             
             if(author.length>15 || author==""){
-                document.getElementById('author').classList.add('outline');
-                document.getElementById('authorWarn').innerHTML = "Title must not greater than 15 characters and cannot be blank.";
+                $('#author').addClass('outline');
+                $('#authorWarn').text("Title must not greater than 15 characters and cannot be blank.");
                 return false;
             }
-        }
+        
+            
+        })
+    })
+        // const validation = (e)=>{
+        //     const title = document.insertForm.title.value;
+        //     const desc = document.insertForm.desc.value;
+        //     const author = document.insertForm.author.value;
+        //     document.getElementById('titleWarn').innerHTML = "";
+        //     document.getElementById('descWarn').innerHTML = "";
+        //     document.getElementById('authorWarn').innerHTML ="";
+        //     document.getElementById('title').classList.remove('outline');
+        //     document.getElementById('desc').classList.remove('outline');
+        //     document.getElementById('author').classList.remove('outline');
+        //     if(title.length>50 || title==""){
+        //         document.getElementById('title').classList.add('outline');
+        //         document.getElementById('titleWarn').innerHTML = "Title must not greater than 50 characters and cannot blank.";
+        //         return false;
+        //     }
+            
+        //     if(desc.length<=150 || desc==null){
+        //         document.getElementById('desc').classList.add('outline');
+        //         document.getElementById('descWarn').innerHTML = "Description must be greater than 150 characters and cannot be blank.";
+        //         return false;
+        //     }
+            
+        //     if(author.length>15 || author==""){
+        //         document.getElementById('author').classList.add('outline');
+        //         document.getElementById('authorWarn').innerHTML = "Title must not greater than 15 characters and cannot be blank.";
+        //         return false;
+        //     }
+        // }
     </script>
 </body>
 
